@@ -2,10 +2,10 @@ clc;
 clear;
 warning off;
 
-% load('Caltech101-7.mat');data = 'Caltech101-7';v = size(X,2);n = size(Y,1);param.dd = [48,40,254,1984,512,928];
-load('handwritten.mat');data = 'handwritten';v = size(X,2);n=2000;param.dd = [240,76,216,47,64,6];
-% load('MSRC_V1_5views.mat');data = 'MSRC_v1_5v';v = size(X,2);n=210;param.dd = [1302,48,512,256,210];
-% load('youtube.mat');data = 'youtube';v = size(X,2);n = 1592;param.dd = [750,750];
+% load('Caltech101-7.mat');data = 'Caltech101-7';v = size(X,2);n = size(Y,1);param.dd = [48,40,254,1984,512,928];c = 7:
+load('handwritten.mat');data = 'handwritten';v = size(X,2);n=2000;param.dd = [240,76,216,47,64,6];c = 10;
+% load('MSRC_V1_5views.mat');data = 'MSRC_v1_5v';v = size(X,2);n=210;param.dd = [1302,48,512,256,210];c = 7;
+% load('youtube.mat');data = 'youtube';v = size(X,2);n = 1592;param.dd = [750,750];c = 11;
 for i = 1 :v
     for  j = 1:n
         X{i}(j,:) = ( X{i}(j,:) - mean( X{i}(j,:) ) ) / std( X{i}(j,:) ) ;
@@ -22,9 +22,10 @@ param.eta = 1e+6; %fixed
 selectedFeas = 500;
 param.v = v;
 param.t = 2;
-param.k = 10;
+param.k = 10;%for msrc-v1,hand,youtube k=10;for caltech101-7 k=5;
 param.n = n;
 param.d = d;
+param.c = c;
 param.NITER = 10;
 
 rand('twister',5489);
@@ -46,8 +47,8 @@ Xw = XX(index(1:selectedFeas),:);
 for m = 1:10
     [y] = kmeans(Xw', param.k);
     result = ClusteringMeasure(Y,y);
-    fprintf('dataset = %s, k = %d, ¦Á = %d, ¦Â = %d,¦Ã = %d, ¦Ç = %d, selectedFeas = %d,time = %d,',...
-        data,param.k,param.alpha,param.beta,param.gamma,param.eta,selectedFeas,time(j));
+    fprintf('dataset = %s, k = %d, Â¦Ã = %d, Â¦Ã‚ = %d,Â¦Ãƒ = %d, Â¦Ã‡ = %d, selectedFeas = %d,time = %d,',...
+        data,param.k,param.alpha,param.beta,param.gamma,param.eta,selectedFeas);
     
     fprintf('\n');
     disp(['Best. ACC: ',num2str(result(1))]);
@@ -60,7 +61,7 @@ end
 result1 = sum(Fin_result);
 result2 = result1/10;
 
-fprintf('dataset = %s, k = %d, ¦Á = %d, ¦Â = %d,¦Ã = %d, ¦Ç = %d,selectedFeas = %d , ',...
+fprintf('dataset = %s, k = %d, Â¦Ã = %d, Â¦Ã‚ = %d,Â¦Ãƒ = %d, Â¦Ã‡ = %d,selectedFeas = %d , ',...
     data,param.k,param.alpha,param.beta,param.gamma,param.eta,selectedFeas);
 fprintf('\n');
 disp(['mean. ACC: ',num2str(result2(1))]);
